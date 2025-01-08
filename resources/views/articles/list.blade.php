@@ -20,7 +20,7 @@
                 <div class="mb-6">
                     <h2 class="text-2xl font-bold">{{ $article->title }}</h2>
                     <p class="mt-2">{{ Illuminate\Support\Str::limit($article->content, 50, '...') }}</p>
-                    <a href="blog/1.html" class="text-blue-500 hover:underline">Read more</a>
+                    <a href="{{ route('articles.show', [$article->id]) }}" class="text-blue-500 hover:underline">Read more</a>
                 </div>
                 @endforeach
                 <!-- Add more blog summaries here -->

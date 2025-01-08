@@ -18,7 +18,7 @@ class ArticleListController extends Controller
                 });
             })
             ->latest()
-            ->paginate(10)
+            ->simplePaginate(10)
             ->withQueryString();
 
         return view('articles.list', [
