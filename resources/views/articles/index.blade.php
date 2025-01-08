@@ -15,12 +15,24 @@
                                 {{ session('success_message') }}
                             </div>
                         @endif
+                        <form action="{{ route('articles.index') }}" method="GET" class="mb-4">
+                            <div class="flex items-center">
+                                <input type="text" name="search" placeholder="Cari artikel..." class="input input-bordered w-full max-w-xs" value="{{ request('search') }}">
+                                <select name="status" class="select select-bordered ml-2">
+                                    <option value="">Semua Status</option>
+                                    <option value="1" {{ request('status') == 'published' ? 'selected' : '' }}>Published</option>
+                                    <option value="0" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary ml-2">Cari</button>
+                            </div>
+                        </form>
                         <table class="table w-full">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Judul</th>
                                     <th>Slug</th>
+                                    <th>Waktu Dibuat</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -42,6 +54,7 @@
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $article->title }}</td>
                                             <td>{{ $article->slug }}</td>
+                                            <td>{{ $article->created_at->translatedFormat('d F Y H:i') }}</td>
                                             <td>
                                                 <span class="badge badge-{{ $article->is_published ? 'success' : 'warning' }}">{{ $article->is_published ? 'Published' : 'Draft' }}</span>
                                             </td>
@@ -55,6 +68,7 @@
                             </tbody>
                         </table>
                         {{ $articles->links() }}
+                        <a href="{{ route('articles.create') }}" class="btn btn-sm btn-primary">Tambah</a>
                     </div>
                 </div>
             </div>

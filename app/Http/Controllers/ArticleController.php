@@ -6,6 +6,7 @@ use App\Models\Article;
 use Illuminate\Support\Str;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+use Illuminate\Database\Eloquent\Builder;
 
 class ArticleController extends Controller
 {
@@ -16,7 +17,15 @@ class ArticleController extends Controller
     {
         $articles = Article::query()
             ->where('user_id', auth()->user()->id)
-            ->paginate(10);
+            ->when(request('search'), function(Builder $query) {
+                $query->where(function(Builder $query) {
+                    $query->where('title', 'like', '%' . request('search') . '%')
+                        ->orWhere('content', 'like', '%' . request('search') . '%');
+                });
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
         return view('articles.index', [
             'articles' => $articles,
         ]);
@@ -27,7 +36,11 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        return view('articles.form', [
+            'article' => new Article(),
+            'title' => 'Tambah Artikel',
+            'action' => 'create',
+        ]);
     }
 
     /**
@@ -35,7 +48,13 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        //
+        $article = new Article();
+        $article->fill($request->validated());
+        $article->slug = Str::slug($request->title);
+        $article->user_id = auth()->user()->id;
+        $article->save();
+
+        return redirect()->route('articles.index')->with('success_message', 'Artikel berhasil ditambah');
     }
 
     /**
