@@ -19,6 +19,6 @@ Route::middleware('auth')->group(function () {
     Route::resource('articles', ArticleController::class);
 });
 Route::get('articles', ArticleListController::class)->name('articles.list');
-Route::get('articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
+Route::get('articles/{article:slug}', [ArticleController::class, 'show'])->name('articles.show');
 
 require __DIR__.'/auth.php';
