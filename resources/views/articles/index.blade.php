@@ -10,11 +10,17 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <div class="overflow-x-auto">
+                        @if (session('success_message'))
+                            <div class="alert alert-success">
+                                {{ session('success_message') }}
+                            </div>
+                        @endif
                         <table class="table w-full">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Judul</th>
+                                    <th>Slug</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -35,12 +41,13 @@
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $article->title }}</td>
+                                            <td>{{ $article->slug }}</td>
                                             <td>
                                                 <span class="badge badge-{{ $article->is_published ? 'success' : 'warning' }}">{{ $article->is_published ? 'Published' : 'Draft' }}</span>
                                             </td>
                                             <td>
-                                                <button class="btn btn-sm btn-warning">Edit</button>
-                                                <button class="btn btn-sm btn-error">Hapus</button>
+                                                <a href="{{ route('articles.edit', [$article->id]) }}" class="btn btn-sm btn-warning">Edit</a>
+                                                <a href="#" class="btn btn-sm btn-error">Hapus</a>
                                             </td>
                                         </tr>
                                     @endforeach

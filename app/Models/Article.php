@@ -14,7 +14,8 @@ class Article extends Model
         'user_id',
         'title',
         'content',
-        'password'
+        'password',
+        'is_published',
     ];
 
     protected function casts(): array
